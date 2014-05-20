@@ -1,27 +1,53 @@
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
-public class BoundaryCondition {
+import org.apache.hadoop.io.Writable;
 
-	Node source;
-	Node destination;
-	float pagerank;
+
+public class BoundaryCondition implements Writable{
+
+	int source;
+	int destination;
+	double pagerank;
+	//hadoop constructor
+	public BoundaryCondition(){
+	}
 	
-	public BoundaryCondition(Node s, Node d){
+	public BoundaryCondition(int s, int d){
 		this.source = s;
 		this.destination = d;
-		this.pagerank = s.pagerank/s.getOrder();
+		this.pagerank = 0.0f;
 	}
-	public BoundaryCondition(Node s, Node d, float pagerank){
+	public BoundaryCondition(int s, int d, double e){
 		this.source = s;
 		this.destination = d;
-		this.pagerank = pagerank;
+		this.pagerank = e;
 	}
-	public Node getSource(){
+	public int getSource(){
 		return source;
 	}
 	
-	public Node getDestination(){
+	public int getDestination(){
 		return destination;
 	}
-	
-	
+	public double getPageRank() {
+		return pagerank;
+	}
+	public String toString(){
+		return "S:" + source +" D:"+ destination +" PR:"+ pagerank;
+	}
+	@Override
+	public void readFields(DataInput in) throws IOException {
+		source = in.readInt();
+		destination = in.readInt();
+		pagerank = in.readDouble();		
+		
+	}
+	@Override
+	public void write(DataOutput out) throws IOException {
+		out.writeInt(source);
+		out.writeInt(destination);
+		out.writeDouble(pagerank);
+	}
 }
